@@ -147,7 +147,7 @@ app.get("/api/get/project", async (req, res) => {
     return {
       ID: r.id,
       UserID: r.userId,
-      PackageID: r.packageId,
+      ProjectID: r.packageId,
       Url: r.url,
       Release: r.release,
       ZigVersion: r.zig_version,
