@@ -13,7 +13,7 @@ const { getPackage } = require("../handlers/package");
 
 app.get("/api/v1/release", require_login_nr, async (req, res) => {
   const [success, release, error] = await getRelease({
-    packageName: req.query.packageName,
+    packageName: req.query.package_name,
     release: req.query.release,
   });
   if (!success) {
