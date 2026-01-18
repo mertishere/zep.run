@@ -55,7 +55,7 @@ const getReleases = async ({
 };
 
 const postRelease = async ({ userId, packageId, release }) => {
-  // if (!RELEASE_REGEXP.test(release)) return fail()
+  if (!RELEASE_REGEXP.test(release.release)) return fail("Invalid Release");
   await prisma.$connect();
 
   const c = await prisma.release

@@ -10,6 +10,14 @@ const {
 } = require("../handlers/package");
 
 app.get("/api/v1/package", async (req, res) => {
+  if (!PACKAGE_NAME_REGEXP.test(req.query.name)) {
+    res.status(400).json({
+      success: false,
+      error: "Invalid Name.",
+    });
+    return;
+  }
+
   const [exists] = await checkPackageExists({
     name: req.query.name,
   });

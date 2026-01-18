@@ -25,6 +25,7 @@ const {
 } = require("../handlers/auth");
 const { postFile } = require("../utils/buckets/bucket");
 const jsonwebtoken = require("jsonwebtoken");
+const { PACKAGE_NAME_REGEXP } = require("../utils/constants/regexp");
 
 app.get("/api/whoami", require_login_nr, async (req, res) => {
   const parsedUser = {
@@ -117,6 +118,14 @@ app.get("/api/get/projects", require_login_nr, async (req, res) => {
   });
 });
 app.get("/api/get/project", async (req, res) => {
+  if (!PACKAGE_NAME_REGEXP.test(req.query.name)) {
+    res.status(400).json({
+      success: false,
+      error: "Invalid Name.",
+    });
+    return;
+  }
+
   const [exists] = await checkPackageExists({
     name: req.query.name,
   });
