@@ -140,6 +140,7 @@ app.post("/api/v1/verify", block_login_nr, async (req, res) => {
   res.status(200).json({
     success: false,
     error: null,
+    jwt,
   });
 });
 

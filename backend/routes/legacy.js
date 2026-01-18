@@ -342,7 +342,7 @@ app.get("/api/auth/verify", require_login_nr, async (req, res) => {
   res.status(200).json({
     success: false,
     error: null,
-    token: jwt,
+    jwt,
   });
 });
 
@@ -388,6 +388,7 @@ app.post("/api/auth/login", block_login_nr, async (req, res) => {
     res.status(200).json({
       success: true,
       error: null,
+      jwt,
     });
     return;
   });
