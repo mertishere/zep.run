@@ -11,7 +11,7 @@ const mailer = async (params) => {
     const transactionalEmailsApi = new TransactionalEmailsApi();
     transactionalEmailsApi.setApiKey(
       TransactionalEmailsApiApiKeys.apiKey,
-      process.env.BREVO
+      process.env.BREVO,
     );
 
     const sendSmtpEmail = new SendSmtpEmail();
@@ -23,10 +23,8 @@ const mailer = async (params) => {
     sendSmtpEmail.templateId = params.templateId;
     sendSmtpEmail.params = params.parameters;
 
-    const response = await transactionalEmailsApi.sendTransacEmail(
-      sendSmtpEmail
-    );
-    console.log(response.response.statusCode);
+    const response =
+      await transactionalEmailsApi.sendTransacEmail(sendSmtpEmail);
     if (response.response.errored) {
       console.error(response.response.errored);
     }
