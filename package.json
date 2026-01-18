@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "eslint": "bunx eslint backend/",
     "build": "bun build backend/server.js --target node --outdir dist",
     "start": "bun dist/server.js",
     "dev": "nodemon backend/server.js"
@@ -12,6 +13,7 @@
   "author": "",
   "license": "GPL-3.0-only",
   "dependencies": {
+    "@eslint/compat": "^2.0.1",
     "@getbrevo/brevo": "^3.0.1",
     "@prisma/adapter-neon": "^7.2.0",
     "@prisma/client": "^7.2.0",
@@ -33,7 +35,9 @@
   },
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0"
   },
   "peerDependencies": {
     "typescript": "^5"
