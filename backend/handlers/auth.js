@@ -120,7 +120,7 @@ const verifyUser = async ({ email, code }) => {
         created_at: true,
       },
     })
-    .catch((err) => {
+    .catch(() => {
       return null;
     });
   if (verification == null) return fail();

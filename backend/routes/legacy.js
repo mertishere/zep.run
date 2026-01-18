@@ -16,7 +16,7 @@ const {
   postRelease,
   deleteRelease,
 } = require("../handlers/release");
-const { deleteSessionById } = require("../handlers/auth");
+const { deleteSessionById, verifyUser } = require("../handlers/auth");
 const { postFile } = require("../utils/buckets/bucket");
 
 app.get("/api/whoami", require_login_nr, async (req, res) => {
@@ -240,7 +240,7 @@ app.post(
       error: null,
       release,
     });
-  }
+  },
 );
 app.delete("/api/delete/project", require_login_nr, async (req, res) => {
   const [success, _] = await deletePackage({
@@ -339,72 +339,107 @@ app.get("/api/auth/verify", require_login_nr, async (req, res) => {
     token: jwt,
   });
 });
+
 app.post("/api/auth/login", block_login_nr, async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const [success, session, error] = await authUser({
-    email,
-    password,
+  let body = "";
+
+  req.on("data", (chunk) => {
+    body += chunk.toString();
   });
-  if (!success) {
-    res.status(500).json({
-      success: false,
-      error: error,
+
+  req.on("end", async () => {
+    const payload = JSON.parse(body);
+    const email = payload.email;
+    const password = payload.password;
+    const [success, session, error] = await authUser({
+      email,
+      password,
+    });
+    if (!success) {
+      res.status(500).json({
+        success: false,
+        error: error,
+      });
+      return;
+    }
+
+    let thirty_days_milliseconds = 30 * 24 * 60 * 60 * 1000;
+    const obj = {
+      public_session_id: session.id,
+      session_secret: session.secret,
+      email: session.user.email,
+      public_user_id: session.user.id,
+      username: session.user.username,
+    };
+
+    const jwt = jsonwebtoken.sign(obj, process.env.JWT);
+    res.cookie("token", jwt, {
+      maxAge: Date.now() + thirty_days_milliseconds,
+      httpOnly: true,
+      secure: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      error: null,
     });
     return;
-  }
-
-  let thirty_days_milliseconds = 30 * 24 * 60 * 60 * 1000;
-  const obj = {
-    public_session_id: session.id,
-    session_secret: session.secret,
-    email: session.user.email,
-    public_user_id: session.user.id,
-    username: session.user.username,
-  };
-
-  const jwt = jsonwebtoken.sign(obj, process.env.JWT);
-  res.cookie("token", jwt, {
-    maxAge: Date.now() + thirty_days_milliseconds,
-    httpOnly: true,
-    secure: true,
   });
 
-  res.status(200).json({
-    success: true,
-    error: null,
+  req.on("error", () => {
+    res.status(500).json({
+      success: false,
+      error: "Authenticating Failed.",
+    });
   });
 });
 app.post("/api/auth/register", block_login_nr, async (req, res) => {
-  const [verify_success] = await createVerification({
-    email: req.body.email,
-  });
-  if (!verify_success) {
-    res.status(500).json({
-      success: false,
-      error: "Creating failed",
-    });
-    return;
-  }
+  let body = "";
 
-  await mailer({
-    email: req.body.email,
-    templateId: 15,
-    parameters: {
-      USER_NAME: req.body.username,
-      CODE: c.code,
-    },
-  }).catch((err) => {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      error: "Email transport failed.",
-    });
-    return;
+  req.on("data", (chunk) => {
+    body += chunk.toString();
   });
 
-  res.status(200).json({
-    success: true,
-    error: null,
+  req.on("end", async () => {
+    const payload = JSON.parse(body);
+    const [verify_success] = await createVerification({
+      email: payload.email,
+    });
+    if (!verify_success) {
+      res.status(500).json({
+        success: false,
+        error: "Creating failed",
+      });
+      return;
+    }
+
+    await mailer({
+      email: payload.email,
+      templateId: 15,
+      parameters: {
+        USER_NAME: payload.username,
+        CODE: c.code,
+      },
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        error: "Email transport failed.",
+      });
+      return;
+    });
+
+    res.status(200).json({
+      success: true,
+      error: null,
+    });
+    return;
+  });
+
+  req.on("error", () => {
+    res.status(500).json({
+      success: false,
+      error: "Registering Failed.",
+    });
   });
 });
