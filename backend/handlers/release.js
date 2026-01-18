@@ -136,7 +136,7 @@ const deleteRelease = async ({ id, userId, packageId }) => {
     });
   if (c == null) return fail();
 
-  const parsed = await deleteFile(
+  await deleteFile(
     `packages/${userId}`,
     `${c.package.name}-${c.release}.tar.zstd`,
   );

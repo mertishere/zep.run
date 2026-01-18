@@ -205,14 +205,17 @@ const patchPackage = async ({ id, userId, package }) => {
 const deletePackage = async ({ id, userId }) => {
   await prisma.$connect();
 
-  await prisma.zpackage
+  const c = await prisma.zpackage
     .delete({
       where: {
         id,
         userId,
       },
+      select: {
+        id: true,
+      },
     })
-    .catch(async (err) => {
+    .catch(async () => {
       await prisma.$disconnect();
       return null;
     });

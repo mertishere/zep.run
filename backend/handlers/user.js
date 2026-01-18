@@ -129,9 +129,12 @@ const patchPassword = async ({ id, password }) => {
 
 const deleteUser = async ({ id }) => {
   const c = await prisma.user
-    .create({
-      data: {
+    .delete({
+      where: {
         id,
+      },
+      select: {
+        id: true,
       },
     })
     .catch((err) => {
