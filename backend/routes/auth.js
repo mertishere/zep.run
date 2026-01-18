@@ -62,7 +62,7 @@ app.post("/api/v1/login", block_login_nr, async (req, res) => {
 });
 
 app.post("/api/v1/register", block_login_nr, async (req, res) => {
-  const [verify_success] = await createVerification({
+  const [verify_success, verify] = await createVerification({
     email: req.body.email,
   });
   if (!verify_success) {
@@ -78,7 +78,7 @@ app.post("/api/v1/register", block_login_nr, async (req, res) => {
     templateId: 15,
     parameters: {
       USER_NAME: req.body.username,
-      CODE: c.code,
+      CODE: verify.code,
     },
   }).catch((err) => {
     console.log(err);
@@ -130,7 +130,7 @@ app.post("/api/v1/verify", block_login_nr, async (req, res) => {
     username: session.user.username,
   };
 
-  const jwt = jsonwebtoken.sign(obj, JWT_SECRET);
+  const jwt = jsonwebtoken.sign(obj, process.env.JWT);
   res.cookie("token", jwt, {
     maxAge: Date.now() + thirty_days_milliseconds,
     httpOnly: true,

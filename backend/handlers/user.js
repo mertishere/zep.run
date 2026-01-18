@@ -1,6 +1,7 @@
 const { fail, ok } = require("../helpers/returns");
 const { prisma } = require("../utils/db/prisma_connection");
 const { USRENAME_REGEXP, EMAIL_REGEXP } = require("../utils/constants/regexp");
+const bcrypt = require("bcrypt");
 
 const getUser = async ({
   filter = {

@@ -84,6 +84,7 @@ const authUser = async ({ email, password }) => {
 };
 
 const createVerification = async ({ email }) => {
+  const code = uuid.v4();
   const c = await prisma.verify
     .create({
       data: {
@@ -91,6 +92,9 @@ const createVerification = async ({ email }) => {
         user: {
           email,
         },
+      },
+      select: {
+        code: true,
       },
     })
     .catch(() => {

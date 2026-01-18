@@ -23,6 +23,7 @@ const {
   createSession,
 } = require("../handlers/auth");
 const { postFile } = require("../utils/buckets/bucket");
+const jsonwebtoken = require("jsonwebtoken");
 
 app.get("/api/whoami", require_login_nr, async (req, res) => {
   const parsedUser = {

@@ -108,8 +108,8 @@ app.get("/packages/:id", async (req, res) => {
 
   if (name.endsWith(".json")) {
     fs.readFile(`static/packages/${name}`, "utf8", (err, jsonString) => {
-      const package = JSON.parse(jsonString);
-      res.json(package);
+      const static_package = JSON.parse(jsonString);
+      res.json(static_package);
     });
     return;
   }
