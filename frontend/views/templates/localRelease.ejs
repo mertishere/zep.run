@@ -8,7 +8,7 @@
 	<p>
 		Root File: <%= release.root_file %> 
 	</p>
-	<p class="url">
+	<p class="url" title="<%= release.url %>">
 		Url (hash): <%= release.url.substring(0, 20) %>...<%= release.url.substring(release.url.length - 20) %> 
 		<span>(<%= release.sha256sum %>)</span> 
 	</p>
