@@ -16,7 +16,12 @@ const {
   postRelease,
   deleteRelease,
 } = require("../handlers/release");
-const { deleteSessionById, verifyUser } = require("../handlers/auth");
+const {
+  deleteSessionById,
+  verifyUser,
+  authUser,
+  createSession,
+} = require("../handlers/auth");
 const { postFile } = require("../utils/buckets/bucket");
 
 app.get("/api/whoami", require_login_nr, async (req, res) => {
