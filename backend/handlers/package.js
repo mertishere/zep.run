@@ -122,6 +122,23 @@ const getLocalPackages = async ({}) => {
   return ok(files);
 };
 
+const checkPackageExists = async ({ name }) => {
+  await prisma.$connect();
+  const c = await prisma.zpackage
+    .count({
+      where: {
+        name,
+      },
+    })
+    .catch(async (err) => {
+      await prisma.$disconnect();
+      return false;
+    });
+  if (c == 0) return fail();
+  await prisma.$disconnect();
+  return ok();
+};
+
 const countPackages = async () => {
   await prisma.$connect();
   const c = await prisma.zpackage.count({}).catch(async (err) => {
@@ -212,6 +229,7 @@ module.exports = {
   getLocalPackage,
   getLocalPackages,
   countPackages,
+  checkPackageExists,
   postPackage,
   patchPackage,
   deletePackage,

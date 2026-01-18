@@ -29,8 +29,8 @@ app.post("/api/v1/login", block_login_nr, async (req, res) => {
     email,
     password,
   });
-  console.log(error);
   if (!success) {
+    console.log(error);
     res.status(500).json({
       success: false,
       error: error,

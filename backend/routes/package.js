@@ -6,9 +6,21 @@ const {
   getPackage,
   getPackages,
   deletePackage,
+  checkPackageExists,
 } = require("../handlers/package");
 
-app.get("/api/v1/package", require_login_nr, async (req, res) => {
+app.get("/api/v1/package", async (req, res) => {
+  const [exists] = await checkPackageExists({
+    name: req.query.name,
+  });
+  if (!exists) {
+    res.status(404).json({
+      success: false,
+      error: "Not Found.",
+    });
+    return;
+  }
+
   const [success, package, error] = await getPackage({
     filter: {
       name: req.query.name,

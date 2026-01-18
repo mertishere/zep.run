@@ -50,7 +50,6 @@ const getReleases = async ({
       return null;
     });
   if (c == null) return fail();
-
   await prisma.$disconnect();
   return ok(c);
 };

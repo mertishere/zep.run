@@ -10,6 +10,7 @@ const {
   getPackage,
   postPackage,
   deletePackage,
+  checkPackageExists,
 } = require("../handlers/package");
 const {
   getReleases,
@@ -116,6 +117,17 @@ app.get("/api/get/projects", require_login_nr, async (req, res) => {
   });
 });
 app.get("/api/get/project", async (req, res) => {
+  const [exists] = await checkPackageExists({
+    name: req.query.name,
+  });
+  if (!exists) {
+    res.status(404).json({
+      success: false,
+      error: "Not Found.",
+    });
+    return;
+  }
+
   const [success, releases] = await getReleases({
     filter: {
       packageName: req.query.name,
@@ -188,7 +200,6 @@ app.post("/api/post/project", require_login_nr, async (req, res) => {
     });
   });
 });
-
 app.post(
   "/api/post/release",
   require_login_nr,
@@ -345,7 +356,6 @@ app.get("/api/auth/verify", require_login_nr, async (req, res) => {
     jwt,
   });
 });
-
 app.post("/api/auth/login", block_login_nr, async (req, res) => {
   let body = "";
 
