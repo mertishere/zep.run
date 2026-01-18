@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+  --main: #E3B505;
+  --secondary: #5e0526;
+  --dark: #370327;
+  --light: #107E7D;
+  --highlight: #044B7F;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5
+p {
+  margin: 0;
+}
+
+input:focus,
+button:focus {
+  outline: none;
+  border: none;
+}
+

@@ -1,0 +1,23 @@
+<div class="top">
+	<% if(backindex_link != null) { %>		
+		<a class="backindex" href="<%= backindex_link %>">
+			<%- backindex %>
+		</a>
+	<% } else { %>
+		<a class="backindex" href="/">
+			<img src="/assets/favicon.ico"> zeP
+		</a>
+	<% } %>
+	<div>
+	<% if(top_title != null) { %>		
+		<h1>
+			<%- top_title %>
+		</h1>
+	<% } %>
+	<% if(top_description != null) { %>		
+		<p>
+			<%- top_description %>		
+		</p>
+	<% } %>
+	</div>
+</div>

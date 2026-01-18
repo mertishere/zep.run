@@ -1,0 +1,19 @@
+<a class="package" href="/packages/<%= package.name %>">
+	<div class="package_identifier">
+		<h1>
+			<%= package.name %> 
+		</h1>
+		<p>
+			<%= package.tags.length == 0 ? "No tags." : package.tags %>
+		</p>
+		<p>
+			by: <%= package.user.username %>
+		</p>
+	</div>
+	<div class="package_releases">
+		<%= package.releases.length %> Releases 
+		<% if(package.releases.length > 0) { %>
+			<br> Latest: (<%= package.releases[0].release %>)
+		<% } %>
+	</div>
+</a>

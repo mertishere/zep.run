@@ -1,0 +1,43 @@
+.cookie_wrapper {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	margin: 1rem;
+	padding: 2rem;
+	background-color: var(--light);
+	z-index: 1;
+	margin-bottom: -110%;
+	transition: .8s;
+	width: 30%;
+}
+
+.cookie_wrapper[open] {
+	margin-bottom: 1rem;
+}
+
+.cookie_wrapper .cookie_buttons_wrapper {
+	display: flex;
+	gap: 1rem;
+}
+
+.cookie_buttons_wrapper button {
+	border-radius: 0;
+  border: 0;
+  color: white;
+  padding: 1rem 2rem;
+  font-family: Saira;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.cookie_buttons_reject {
+	background-color: #6b1f1f;
+}
+.cookie_buttons_accept {
+	background-color: #187930;
+}
+
+.cookie_buttons_wrapper button:hover {
+	filter: brightness(.8);
+}

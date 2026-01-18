@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../layout/default.ejs") %>
+  <title>zeP - Minimalst, Simple package and version manager for Zig.</title>
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="/styles/index.css">
+  <script nonce="<%= nonce %>" defer src="/js/package_pagination.js"></script>
+</head>
+<body>
+  <div class="hero">
+    <%- include("../layout/header.ejs", {
+      backindex_link: null,
+      backindex: null,
+      top_title: `, a Package and Version manager for <br> the Zig Programming Language.`,
+      top_description: `An open source Project, under the GPLv3 License; <a href="https://github.com/XerWoho/zeP">zeP</a>`
+    }) %>
+    <div class="middle">
+      <div class="buttons">
+        <a href="/packages">View Packages</a>
+        <a href="/docs">Publish Package</a>
+        <a href="/install">Install zeP</a>
+      </div>
+      <div class="info">
+        <div>
+          <h1>
+            Fetch, publish and view packages.
+          </h1>
+          <p>
+            Use zeP to publish your own packages, install and <br> search for the package that you need.
+          </p>
+        </div>
+        <div>
+          <h1>
+            Currently:
+          </h1>
+          <p class="packages_amount">
+            <%= packages_count %> Packages
+          </p>
+          <p class="users_amount">
+            <%= users_count %> Users
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include("../layout/footer.ejs") %>
+</body>
+</html>

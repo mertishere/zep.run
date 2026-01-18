@@ -1,0 +1,46 @@
+.top {
+	display: flex;
+	align-items: center !important;
+	gap: 1rem;
+}
+
+.top a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white !important;
+	background-color: black;
+	padding: .5rem 1rem;
+	font-size: 1.2rem !important;
+}
+
+.info {
+	align-items: start !important;
+}
+
+.info p {
+	margin: 0;
+	color: gray;
+}
+
+.info h3 {
+	margin-top: 1rem;
+	margin-left: 1rem;
+	font-weight: normal;
+}
+
+.packages p {
+	margin: 0;
+}
+
+.release .url {
+	display: flex;
+  font-size: .8rem;
+  color: gray;
+  align-items: center;
+  gap: 2rem;
+}
+
+.release .url span {
+	font-size: .7rem;
+}

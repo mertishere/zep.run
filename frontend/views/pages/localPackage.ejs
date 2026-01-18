@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../layout/default.ejs") %>
+  <title>zeP - View package</title>
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="/styles/packages.css">
+  <link rel="stylesheet" href="/styles/package.css">
+</head>
+<body>
+  <div class="hero">
+    <%- include("../layout/header.ejs", {
+      backindex_link: "/packages",
+      backindex: `back`,
+      top_title: `Package - ${package.name}`,
+      top_description: null
+    }) %>
+    <div class="middle">
+      <div class="info">
+		<h1>
+			<%= package.name %>
+		</h1>
+		<p>
+			<% const gitUrl = package.versions[0].url.split("/").splice(0,5).join("/") %>				
+			Source: <a href="<%= gitUrl %>"><%= gitUrl %></a>
+		</p>
+		<p>
+			Developed by: <%= package.author %>
+		</p>
+		
+		<h3>
+			<i>
+				Uploaded by Server
+			</i>
+		</h3>
+      </div>
+      <div class="packages_wrapper">
+        <h1>
+          Current Releases:
+        </h1>
+        <div class="packages">
+          <% if(package.versions.length > 0) { %>
+            <% for(let release of package.versions) { %>
+              <%- include("../templates/localRelease.ejs", { release: release }) %>
+            <% } %>
+          <% } else { %>
+            <p>
+              No releases.
+            </p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include("../layout/footer.ejs") %>
+</body>
+</html>

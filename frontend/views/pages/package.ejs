@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../layout/default.ejs") %>
+  <title>zeP - View package</title>
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="/styles/packages.css">
+  <link rel="stylesheet" href="/styles/package.css">
+  <script nonce="<%= nonce %>" defer src="/js/release_pagination.js"></script>
+</head>
+<body>
+  <div class="hero">
+    <%- include("../layout/header.ejs", {
+      backindex_link: "/packages",
+      backindex: `back`,
+      top_title: `Package - ${package.name}`,
+      top_description: null
+    }) %>
+    <div class="middle">
+      <div class="info">
+		<h1>
+			<%= package.name %>
+		</h1>
+		<p>
+			ID: <%= package.id %>
+		</p>
+		<p>
+			Developed by: <%= package.user.username %>
+		</p>
+		
+		<h3>
+			<%= package.description %>
+		</h3>
+      </div>
+      <div class="packages_wrapper">
+        <h1>
+          Current Releases:
+        </h1>
+        <div class="releases" package_name="<%= package.name %>">
+          <% if(package.releases.length > 0) { %>
+            <% for(let release of package.releases) { %>
+              <%- include("../templates/release.ejs", { release: release }) %>
+            <% } %>
+          <% } else { %>
+            <p>
+              No releases.
+            </p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include("../layout/footer.ejs") %>
+
+</body>
+</html>

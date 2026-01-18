@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("../layout/default.ejs") %>
+  <title>zeP - Find packages</title>
+  <link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="/styles/index.css">
+  <link rel="stylesheet" href="/styles/packages.css">
+  <script nonce="<%= nonce %>" defer src="/js/packages.js"></script>
+  <script nonce="<%= nonce %>" defer src="/js/package_pagination.js"></script>
+</head>
+<body>
+  <div class="hero">
+    <%- include("../layout/header.ejs", {
+      backindex_link: null,
+      backindex: null,
+      top_title: `Find packages that you need. ${query != null ? `Searched for: "${query}"` : ""}`,
+      top_description: null
+    }) %>
+    <div class="middle">
+      <div class="buttons">
+        <a href="/packages">View Packages</a>
+        <a href="/docs">Publish Package</a>
+        <a href="/install">Install zeP</a>
+      </div>
+      <div class="info">
+        <p>
+          Note, some packages are added from the server, <br> rather than users. These are marked as "safer" than
+          the published packages.
+        </p>
+        <form class="search_wrapper">
+          <input type="text" class="search_query" value="<%= query ?? "" %>">
+          <button type="submit" class="search"><img src="/assets/search.png" alt="search"></button>
+        </form>
+      </div>
+      <div class="packages_wrapper">
+        <h1>
+          <% if(query != null) { %>
+            Results:
+          <% } else { %>
+            Current Packages:
+          <% } %>
+        </h1>
+        <div class="packages">
+          <% if(packages.length > 0) { %>
+            <% for(let package of packages) { %>
+              <%- include("../templates/package.ejs", { package: package }) %>
+            <% } %>
+          <% } else { %>
+            <p>
+              No packages.
+            </p>
+          <% } %>
+        </div>
+      </div>
+      <div class="packages_wrapper">
+        <h1>
+          Local Packages:
+        </h1>
+        <div class="packages">
+          <% for(let package of localPackages) { %>
+            <%- include("../templates/localPackage.ejs", { package: package }) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include("../layout/footer.ejs") %>
+
+</body>
+</html>

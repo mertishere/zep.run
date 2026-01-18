@@ -1,0 +1,21 @@
+<a class="package" href="/packages/s/<%= package.name %>">
+	<div class="package_identifier">
+		<h1>
+			<%= package.name %> 
+		</h1>
+		<p>
+			<i>
+				Uploaded by Server
+			</i>			
+		</p>
+		<p>
+			by: <%= package.author %>
+		</p>
+	</div>
+	<div class="package_releases">
+		<%= package.versions.length %> Releases 
+		<% if(package.versions.length > 0) { %>
+			<br> Latest: (<%= package.versions[0].version %>)
+		<% } %>
+	</div>
+</a>
