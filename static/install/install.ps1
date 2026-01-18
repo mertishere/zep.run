@@ -1,4 +1,4 @@
-$Target = "1.0.3-beta" # latest version
+$Target = "1.0.2" # latest version
 if (-not ($args.Length -eq 0)) {
     $Target = $args[0]
 }
@@ -11,6 +11,20 @@ function Ensure-Admin {
 }
 Ensure-Admin
 
+
+function Show-Step {
+    param (
+        [int]$Percent,
+        [string]$Activity,
+        [string]$Status
+    )
+
+    Write-Progress `
+        -Activity $Activity `
+        -Status $Status `
+        -PercentComplete $Percent
+}
+
 $OldZepDir = "C:/Users/Public/AppData/Local/zeP"
 $OldZepZepExe = "C:/Users/Public/AppData/Local/zeP/zep/e/zep.exe"
 $OldZepZigExe = "C:/Users/Public/AppData/Local/zeP/zig/e/zig.exe"
@@ -18,13 +32,18 @@ $OldZepZigExe = "C:/Users/Public/AppData/Local/zeP/zig/e/zig.exe"
 $ZepDir = "C:$Env:HOMEPATH/.zep"
 $Bin = "$ZepDir/bin"
 # Move the old paths contents to the new path
+#
 if (Test-Path $OldZepDir -PathType Container) {
+    Show-Step 1 "Detected older zeP installation" "Moving to new destination"
+
     if (!(Test-Path $ZepDir)) {
         New-Item -ItemType Directory -Path $ZepDir | Out-Null
     }
+    Show-Step 4 "Detected older zeP installation" "Moving to new destination"
 
     Move-Item -Path (Join-Path $OldZepDir '*') -Destination $ZepDir -Force
 
+    Show-Step 5 "Detected older zeP installation" "Moving to new destination"
     Remove-Item $OldZepDir -Recurse -Force
 }
 
@@ -88,19 +107,28 @@ function Set-Up {
 
     Set-EnvVar
 }
+Show-Step 10 "Running Set up" "Creating Folders and Setting Enviroment Variables"
 Set-Up
 
+# Fetch target version
+# And extract
 function Get-Download {
+    Show-Step 20 "Getting zeP" "Fetching target $TARGET, from official zep.run site"
     Invoke-WebRequest -uri "https://zep.run/releases/$TARGET/zep_x86_64-windows_$TARGET.zip" -Method "GET"  -Outfile $TempZepZigFile
-    Expand-Archive $TempZepZigFile -DestinationPath $DestZepZigDir
+
+    Show-Step 50 "Extrating" "Extracting to temporary file $TempZepZigFile"
+    Expand-Archive $TempZepZigFile -DestinationPath $ZepExeDest
     Remove-Item -Path $TempZepZigDir -Force -Recurse
 }
+
 Get-Download
 
-
+Show-Step 80 "Final" "Setting up symbolic link."
 if (Test-Path $ExeZepFile) { Remove-Item $ExeZepFile -Force }
 New-Item -ItemType SymbolicLink -Target $ZepTargetFile -Path $ExeZepFile | Out-Null  # exeZep is the symlink
 
+Show-Step 100 "Done." "Done."
 Write-Host "Installation finished for zeP version $Target."
 Write-Host "The location of the executeable is: $ExeZepFile"
 Write-Host "You may need to restart your Terminal. After that run '$ zep help', for checking."
+Read-Host "Done."
