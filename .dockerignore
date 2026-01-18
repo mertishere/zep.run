@@ -6,3 +6,4 @@ docker-compose*
 .gitignore
 README.md
 .env
+dist
