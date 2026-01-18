@@ -17,6 +17,11 @@ const getUser = async ({
   const user = await prisma.user
     .findUnique({
       where,
+      select: {
+        id: true,
+        username: true,
+        created_at: true,
+      },
     })
     .catch((err) => {
       return null;
