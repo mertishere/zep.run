@@ -29,4 +29,4 @@ COPY --from=build /usr/src/app ./
 USER bun
 EXPOSE 8080
 
-ENTRYPOINT ["doppler", "run", "--", "bun", "run", "start"]
+ENTRYPOINT ["doppler", "run", "--", "bun", "dist/server.js"]
