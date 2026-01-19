@@ -134,12 +134,12 @@ app.get("/packages/:id", async (req, res) => {
 });
 
 app.get("/packages/s/:id", async (req, res) => {
-  const [success, package] = await getLocalPackage({
+  const [success, _package] = await getLocalPackage({
     name: req.params.id,
   });
 
   res.render("pages/localPackage.ejs", {
-    package,
+    package: _package,
   });
 });
 
