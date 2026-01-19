@@ -8,6 +8,7 @@ const {
   deletePackage,
   checkPackageExists,
 } = require("../handlers/package");
+const { PACKAGE_NAME_REGEXP } = require("../utils/constants/regexp");
 
 app.get("/api/v1/package", async (req, res) => {
   if (!PACKAGE_NAME_REGEXP.test(req.query.name)) {
@@ -29,7 +30,7 @@ app.get("/api/v1/package", async (req, res) => {
     return;
   }
 
-  const [success, package, error] = await getPackage({
+  const [success, _package, error] = await getPackage({
     filter: {
       name: req.query.name,
       id: req.query.id,
@@ -46,7 +47,7 @@ app.get("/api/v1/package", async (req, res) => {
   res.status(200).json({
     success: true,
     error: null,
-    package,
+    package: _package,
   });
 });
 
@@ -85,7 +86,7 @@ app.get("/api/v1/packages", async (req, res) => {
 });
 
 app.post("/api/v1/package", require_login_nr, async (req, res) => {
-  const [success, package, error] = await postPackage({
+  const [success, _package, error] = await postPackage({
     userId: req.user.id,
     package: req.body.package,
   });
@@ -100,7 +101,7 @@ app.post("/api/v1/package", require_login_nr, async (req, res) => {
   res.status(200).json({
     success: true,
     error: null,
-    package,
+    package: _package,
   });
 });
 

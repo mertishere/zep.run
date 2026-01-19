@@ -3,15 +3,6 @@ if (-not ($args.Length -eq 0)) {
     $Target = $args[0]
 }
 
-function Ensure-Admin {
-    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
-        Start-Process powershell -Verb runAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`" $Target"
-        exit
-    }
-}
-Ensure-Admin
-
-
 function Show-Step {
     param (
         [int]$Percent,
@@ -125,7 +116,7 @@ Get-Download
 
 Show-Step 80 "Final" "Setting up symbolic link."
 if (Test-Path $ExeZepFile) { Remove-Item $ExeZepFile -Force }
-New-Item -ItemType SymbolicLink -Target $ZepTargetFile -Path $ExeZepFile | Out-Null  # exeZep is the symlink
+Copy-Item -Path $ZepTargetFile -Destination $ExeZepFile -Force
 
 Show-Step 100 "Done." "Done."
 Write-Host "Installation finished for zeP version $Target."

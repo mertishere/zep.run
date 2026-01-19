@@ -98,6 +98,14 @@ app.get("/packages", async (req, res) => {
 const fs = require("fs");
 app.get("/packages/:id", async (req, res) => {
   const name = req.params.id;
+  if (name == undefined) {
+    res.status(400).json({
+      success: false,
+      error: "invalid name.",
+    });
+    return;
+  }
+
   if (name.includes("../")) {
     res.status(400).json({
       success: false,
@@ -114,14 +122,14 @@ app.get("/packages/:id", async (req, res) => {
     return;
   }
 
-  const [success, package] = await getPackage({
+  const [success, _package] = await getPackage({
     filter: {
       name,
     },
   });
 
   res.render("pages/package.ejs", {
-    package,
+    package: _package,
   });
 });
 

@@ -68,7 +68,7 @@ sudo rm -rf "$TEMP_DIR"
 chmod 755 "$ZEP_VERSION_EXE"
 sudo rm -rf "$ZEP_EXE"
 
-sudo ln -s "$ZEP_VERSION_EXE" "$ZEP_EXE"
+sudo cp "$ZEP_VERSION_EXE" "$ZEP_EXE"
 sudo chmod 755 "$ZEP_VERSION_EXE"
 
 echo "Installation finished for zeP version $Target."
