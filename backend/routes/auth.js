@@ -23,7 +23,9 @@ app.get("/api/v1/whoami", require_login_nr, async (req, res) => {
 });
 
 app.post("/api/v1/login", block_login_nr, async (req, res) => {
-  const email = req.body.email;
+  const e = req.body.email;
+  const email = e.toLowerCase();
+
   const password = req.body.password;
   const [success, session, error] = await authUser({
     email,
@@ -62,8 +64,11 @@ app.post("/api/v1/login", block_login_nr, async (req, res) => {
 });
 
 app.post("/api/v1/register", block_login_nr, async (req, res) => {
+  const e = req.body.email;
+  const email = e.toLowerCase();
+
   const [verify_success, verify] = await createVerification({
-    email: req.body.email,
+    email,
   });
   if (!verify_success) {
     res.status(500).json({
@@ -74,7 +79,7 @@ app.post("/api/v1/register", block_login_nr, async (req, res) => {
   }
 
   await mailer({
-    email: req.body.email,
+    email,
     templateId: 15,
     parameters: {
       USER_NAME: req.body.username,
@@ -96,7 +101,9 @@ app.post("/api/v1/register", block_login_nr, async (req, res) => {
 });
 
 app.post("/api/v1/verify", block_login_nr, async (req, res) => {
-  const email = req.body.email;
+  const e = req.body.email;
+  const email = e.toLowerCase();
+
   const code = req.body.code;
   const [verify_success, verified_user, verify_error] = await verifyUser({
     email: email,
@@ -164,8 +171,10 @@ app.get("/api/v1/logout", require_login_nr, async (req, res) => {
 });
 
 app.post("/api/v1/forgot", block_login_nr, async (req, res) => {
-  const email = req.body.email;
-  const [success, u] = await getUser({
+  const e = req.body.email;
+  let email = e.toLowerCase();
+
+  const [success, _] = await getUser({
     filter: {
       email,
     },

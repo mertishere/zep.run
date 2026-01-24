@@ -22,10 +22,12 @@ const {
   verifyUser,
   authUser,
   createSession,
+  createVerification,
 } = require("../handlers/auth");
 const { postFile } = require("../utils/buckets/bucket");
 const jsonwebtoken = require("jsonwebtoken");
 const { PACKAGE_NAME_REGEXP } = require("../utils/constants/regexp");
+const { mailer } = require("../utils/mail/mailer");
 
 app.get("/api/whoami", require_login_nr, async (req, res) => {
   const parsedUser = {
@@ -173,7 +175,7 @@ app.post("/api/post/project", require_login_nr, async (req, res) => {
 
   req.on("end", async () => {
     const payload = JSON.parse(body);
-    const [success, package] = await postPackage({
+    const [success, _package] = await postPackage({
       userId: req.user.id,
       package: payload,
     });
@@ -189,7 +191,7 @@ app.post("/api/post/project", require_login_nr, async (req, res) => {
     res.status(200).json({
       success: true,
       error: null,
-      package,
+      package: _package,
     });
     return;
   });
@@ -212,7 +214,7 @@ app.post(
   }).any(),
   async (req, res) => {
     const packageId = req.body.project_id;
-    const [package_success, package, package_error] = await getPackage({
+    const [package_success, _package, package_error] = await getPackage({
       filter: {
         id: packageId,
       },
@@ -230,7 +232,7 @@ app.post(
     const url = await postFile({
       buffer: file.buffer,
       folderName: `packages/${req.user.id}`,
-      fileName: `${package.name}-${req.body.release}.tar.zstd`,
+      fileName: `${_package.name}-${req.body.release}.tar.zstd`,
     });
 
     const [success, release] = await postRelease({
@@ -317,7 +319,8 @@ app.get("/api/auth/logout", require_login_nr, async (req, res) => {
   });
 });
 app.get("/api/auth/verify", require_login_nr, async (req, res) => {
-  const email = req.body.email;
+  const e = req.body.email;
+  const email = e.toLowerCase();
   const code = req.body.code;
   const [verify_success, verified_user, verify_error] = await verifyUser({
     email: email,
@@ -350,7 +353,7 @@ app.get("/api/auth/verify", require_login_nr, async (req, res) => {
     username: session.user.username,
   };
 
-  const jwt = jsonwebtoken.sign(obj, JWT_SECRET);
+  const jwt = jsonwebtoken.sign(obj, process.env.JWT);
   res.status(200).json({
     success: false,
     error: null,
@@ -420,7 +423,7 @@ app.post("/api/auth/register", block_login_nr, async (req, res) => {
 
   req.on("end", async () => {
     const payload = JSON.parse(body);
-    const [verify_success] = await createVerification({
+    const [verify_success, verify] = await createVerification({
       email: payload.email,
     });
     if (!verify_success) {
@@ -436,7 +439,7 @@ app.post("/api/auth/register", block_login_nr, async (req, res) => {
       templateId: 15,
       parameters: {
         USER_NAME: payload.username,
-        CODE: c.code,
+        CODE: verify.code,
       },
     }).catch((err) => {
       console.log(err);

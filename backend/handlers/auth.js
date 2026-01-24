@@ -2,7 +2,7 @@ const { prisma } = require("../utils/db/prisma_connection");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const { fail, ok } = require("../helpers/returns");
-const { getUser } = require("./user");
+const { getUser, privateGetUser } = require("./user");
 
 const createSession = async ({ id }) => {
   const secret = uuid.v4();
@@ -64,13 +64,12 @@ const deleteSessionById = async ({ id }) => {
 
 const authUser = async ({ email, password }) => {
   await prisma.$connect();
-  const [user_success, user] = await getUser({
+  const [user_success, user] = await privateGetUser({
     filter: {
       email,
     },
   });
   if (!user_success) return fail("User not found");
-
   const bc = await bcrypt.compare(password, user.password);
   if (!bc) return fail("Invalid password");
 

@@ -3,6 +3,35 @@ const { prisma } = require("../utils/db/prisma_connection");
 const { USRENAME_REGEXP, EMAIL_REGEXP } = require("../utils/constants/regexp");
 const bcrypt = require("bcrypt");
 
+const privateGetUser = async ({
+  filter = {
+    id: null,
+    email: null,
+    username: null,
+  },
+}) => {
+  const where = {};
+  if (filter.id) where.id = filter.id;
+  if (filter.email) where.email = filter.email;
+  if (filter.username) where.username = filter.username;
+  const user = await prisma.user
+    .findUnique({
+      where,
+      select: {
+        id: true,
+        username: true,
+        created_at: true,
+        password: true,
+      },
+    })
+    .catch((err) => {
+      return null;
+    });
+  if (user == null) return fail();
+
+  return ok(user);
+};
+
 const getUser = async ({
   filter = {
     id: null,
@@ -145,6 +174,7 @@ const deleteUser = async ({ id }) => {
 };
 
 module.exports = {
+  privateGetUser,
   getUser,
   getUsers,
   countUsers,
