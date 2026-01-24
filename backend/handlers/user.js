@@ -20,6 +20,7 @@ const privateGetUser = async ({
       select: {
         id: true,
         username: true,
+        email: true,
         created_at: true,
         password: true,
       },

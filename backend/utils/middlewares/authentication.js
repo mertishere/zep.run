@@ -9,7 +9,7 @@ const invalid_authentication = (req, res) => {
 
 // revalidates session, if the authentication was invalid
 const { getSession } = require("../../handlers/auth");
-const { getUser } = require("../../handlers/user");
+const { getUser, privateGetUser } = require("../../handlers/user");
 const validateSession = async (secret, id, userId) => {
   return await getSession({ secret, id, userId });
 };
@@ -70,7 +70,7 @@ const authenticate_cookies = async (req, res, next) => {
       return;
     }
 
-    const [user_success, user] = await getUser({
+    const [user_success, user] = await privateGetUser({
       filter: {
         id: userId,
       },
