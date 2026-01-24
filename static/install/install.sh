@@ -59,7 +59,7 @@ curl -L "https://zep.run/releases/$TARGET/zep_x86_64-linux_$TARGET.tar.xz" \
     -o "$TEMP_ZEP_TAR_FILE"
 
 tar -xvf "$TEMP_ZEP_TAR_FILE" -C "$ZEP_VERSION_DIR"
-ZEP_VERSION_EXE=$ZEP_VERSION_DIR/zep
+ZEP_VERSION_EXE=$ZEP_VERSION_DIR/zeP
 if [ -e "$ZEP_VERSION_DIR/zep" ]; then
     ZEP_VERSION_EXE=$ZEP_VERSION_DIR/zep
 fi
