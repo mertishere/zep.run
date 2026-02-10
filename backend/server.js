@@ -77,6 +77,16 @@ app.get("/", async (req, res) => {
   });
 });
 
+app.get("/tos", async (req, res) => {
+  res.render("pages/tos.ejs");
+});
+app.get("/privacy", async (req, res) => {
+  res.render("pages/privacy.ejs");
+});
+app.get("/cookies", async (req, res) => {
+  res.render("pages/cookies.ejs");
+});
+
 app.get("/packages", async (req, res) => {
   let query = req.query.query;
   if (query?.length == 0) query = null;
