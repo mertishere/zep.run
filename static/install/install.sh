@@ -1,17 +1,12 @@
 #!/bin/bash
 
-OLD_LOCAL_ZEP="$HOME/.local"
 LOCAL_ZEP="$HOME/.zep"
-
-if [ -e "$OLD_LOCAL_ZEP" ]; then
-    mv $OLD_LOCAL_ZEP $LOCAL_ZEP
-fi
 
 if ! [ -e "$LOCAL_ZEP" ]; then
     mkdir -p "${LOCAL_ZEP}"
 fi
 
-TARGET="1.0.2"
+TARGET="1.2.0"
 if [ $# -gt 0 ]; then
     TARGET="$1"
 fi
