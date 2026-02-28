@@ -22,7 +22,7 @@ jobs:
         run: echo ${{ secrets.GHCR_PAT_TOKEN }} | docker login ghcr.io -u ${{ secrets.USERNAME }} --password-stdin
 
       - name: Tag docker to repo
-        run: docker tag zep:workflow gchr.io/zep/zep:1.0.0
+        run: docker tag zep:workflow gchr.io/XerWoho/zeP:1.0.0
 
       - name: Push docker to repo
-        run: docker push gchr.io/zep/zep:1.0.0
+        run: docker push gchr.io/XerWoho/zeP:1.0.0
