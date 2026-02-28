@@ -19,13 +19,10 @@ jobs:
         run: docker build . -t zep:workflow
 
       - name: Log into registry
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-        with:
-          username: ${{ secrets.DOCKER_REPO_NAME }}
-          password: ${{ secrets.DOCKER_REPO_PASSWORD }}
+        run: echo ${{ secrets.GHCR_PAT_TOKEN }} | docker login ghcr.io -u ${{ secrets.USERNAME }} --password-stdin
 
       - name: Tag docker to repo
-        run: docker tag zep:workflow xerrs/zep:api
+        run: docker tag zep:workflow gchr.io/zep/zep:api
 
       - name: Push docker to repo
-        run: docker push xerrs/zep:api
+        run: docker push gchr.io/zep/zep:api
